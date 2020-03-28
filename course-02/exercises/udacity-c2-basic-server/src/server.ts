@@ -80,7 +80,11 @@ import { Car, cars as cars_list } from './cars';
       return res.status(400).send(`id is required`);
     }
 
-    res.status(200).send(cars.filter(car => car.id === Number(id)));
+    const filtered = cars.filter(car => car.id === Number(id));
+    if (filtered.length === 0) {
+      return res.status(404).send('car not found');
+    }
+    res.status(200).send(filtered);
   });
 
   // Add an endpoint to post a new car to our list
