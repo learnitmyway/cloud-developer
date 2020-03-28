@@ -1,5 +1,4 @@
 {
-  "prettier.singleQuote": false,
   "workbench.colorCustomizations": {
     "activityBar.background": "#d0fcdd",
     "activityBar.activeBackground": "#d0fcdd",
