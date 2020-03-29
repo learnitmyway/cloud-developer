@@ -34,8 +34,50 @@ router.get('/:id', async (req: Request, res: Response) => {
 
 // update a specific resource
 router.patch('/:id', requireAuth, async (req: Request, res: Response) => {
-  //@TODO: try it yourself
-  res.send(500).send('not implemented')
+  const { id } = req.params
+
+  let feedItem
+  try {
+    feedItem = await FeedItem.findByPk(id)
+  } catch (e) {
+    console.error(e)
+    return res.status(500).send('Oops something went wrong')
+  }
+
+  if (!feedItem) {
+    return res.status(404).send(`Feed item not found`)
+  }
+
+  const { caption, url } = req.body
+
+  try {
+    await FeedItem.update(
+      {
+        caption: caption ? caption : feedItem.caption,
+        url: url ? url : feedItem.url
+      },
+      {
+        where: { id }
+      }
+    )
+  } catch (e) {
+    console.error(e)
+    return res.status(200)
+  }
+
+  let updatedFeedItem
+  try {
+    updatedFeedItem = await FeedItem.findByPk(id)
+  } catch (e) {
+    console.error(e)
+    return res.status(500).send('Oops something went wrong')
+  }
+
+  if (!feedItem) {
+    return res.status(404).send(`Feed item not found`)
+  }
+
+  res.send(updatedFeedItem)
 })
 
 // Get a signed url to put a new item in the bucket
