@@ -46,14 +46,16 @@ router.patch('/:id', requireAuth, async (req: Request, res: Response, next) => {
 
   const { caption, url } = req.body
 
+  let updatedFeedItemResult
   try {
-    await FeedItem.update(
+    updatedFeedItemResult = await FeedItem.update(
       {
         caption: caption ? caption : feedItem.caption,
         url: url ? url : feedItem.url
       },
       {
-        where: { id }
+        where: { id },
+        returning: true
       }
     )
   } catch (e) {
@@ -61,18 +63,7 @@ router.patch('/:id', requireAuth, async (req: Request, res: Response, next) => {
     return res.status(200)
   }
 
-  let updatedFeedItem
-  try {
-    updatedFeedItem = await FeedItem.findByPk(id)
-  } catch (e) {
-    next(e)
-  }
-
-  if (!feedItem) {
-    return res.status(404).send(`Feed item not found`)
-  }
-
-  res.send(updatedFeedItem)
+  res.send(updatedFeedItemResult[1])
 })
 
 // Get a signed url to put a new item in the bucket
