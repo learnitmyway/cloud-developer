@@ -17,13 +17,10 @@ router.get('/', async (req: Request, res: Response) => {
 })
 
 //Add an endpoint to GET a specific resource by Primary Key
-router.get('/:id', async (req: Request, res: Response) => {
+router.get('/:id', async (req: Request, res: Response, next) => {
   let { id } = req.params
 
-  const feedItem = await FeedItem.findByPk(id).catch(e => {
-    console.error(e)
-    return res.status(500).send('Oops something went wrong')
-  })
+  const feedItem = await FeedItem.findByPk(id).catch(next)
 
   if (!feedItem) {
     return res.status(404).send(`Feed item not found`)
@@ -33,15 +30,14 @@ router.get('/:id', async (req: Request, res: Response) => {
 })
 
 // update a specific resource
-router.patch('/:id', requireAuth, async (req: Request, res: Response) => {
+router.patch('/:id', requireAuth, async (req: Request, res: Response, next) => {
   const { id } = req.params
 
   let feedItem
   try {
     feedItem = await FeedItem.findByPk(id)
   } catch (e) {
-    console.error(e)
-    return res.status(500).send('Oops something went wrong')
+    next(e)
   }
 
   if (!feedItem) {
@@ -69,8 +65,7 @@ router.patch('/:id', requireAuth, async (req: Request, res: Response) => {
   try {
     updatedFeedItem = await FeedItem.findByPk(id)
   } catch (e) {
-    console.error(e)
-    return res.status(500).send('Oops something went wrong')
+    next(e)
   }
 
   if (!feedItem) {
