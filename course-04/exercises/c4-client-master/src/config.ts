@@ -1,5 +1,4 @@
-const apiId = 'nhmk625tw0'
-export const apiEndpoint = `https://${apiId}.execute-api.us-east-1.amazonaws.com/dev`
+export const apiEndpoint = `https://${process.env.REACT_APP_ID}.execute-api.us-east-1.amazonaws.com/dev`
 
 export const authConfig = {
   domain: 'test-endpoint.auth0.com',
