@@ -9,6 +9,7 @@ import * as AWS from 'aws-sdk'
 const docClient = new AWS.DynamoDB.DocumentClient()
 
 const groupsTable = process.env.GROUPS_TABLE
+const imagesTable = process.env.IMAGES_TABLE
 
 export const handler: APIGatewayProxyHandler = async (
   event: APIGatewayProxyEvent
@@ -29,7 +30,20 @@ export const handler: APIGatewayProxyHandler = async (
     }
   }
 
-  // TODO: Create an image
+  const parsedBody = JSON.parse(event.body)
+
+  const newImage = {
+    groupId,
+    timestamp: Date.now().toString(),
+    ...parsedBody,
+  }
+
+  await docClient
+    .put({
+      TableName: imagesTable,
+      Item: newImage,
+    })
+    .promise()
 
   return {
     statusCode: 201,
