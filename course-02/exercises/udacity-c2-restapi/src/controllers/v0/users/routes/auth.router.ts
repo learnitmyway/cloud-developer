@@ -7,6 +7,7 @@ import * as jwt from 'jsonwebtoken'
 import { NextFunction } from 'connect'
 
 import * as EmailValidator from 'email-validator'
+import { config } from '../../../../config/config'
 
 const router: Router = Router()
 
@@ -25,8 +26,8 @@ async function comparePasswords(
 }
 
 function generateJWT(user: User): string {
-  //@TODO Use jwt to create a new JWT Payload containing
-  return 'TODO'
+  //@DONE Use jwt to create a new JWT Payload containing
+  return jwt.sign(user, config.dev.jwt.secret)
 }
 
 export function requireAuth(req: Request, res: Response, next: NextFunction) {

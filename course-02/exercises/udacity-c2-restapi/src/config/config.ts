@@ -7,13 +7,14 @@ export const config = {
     dialect: 'postgres',
     aws_region: process.env.CONFIG_DEV_AWS_REGION,
     aws_profile: process.env.CONFIG_DEV_AWS_PROFILE,
-    aws_media_bucket: process.env.CONFIG_DEV_AWS_MEDIA_BUCKET
+    aws_media_bucket: process.env.CONFIG_DEV_AWS_MEDIA_BUCKET,
+    jwt: { secret: 'helloworld' },
   },
   prod: {
     username: '',
     password: '',
     database: 'udagram_prod',
     host: '',
-    dialect: 'postgres'
-  }
+    dialect: 'postgres',
+  },
 }
